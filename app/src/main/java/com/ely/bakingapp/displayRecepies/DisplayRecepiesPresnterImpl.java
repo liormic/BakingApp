@@ -5,6 +5,8 @@ import com.ely.bakingapp.network.CallInterceptor;
 import com.ely.bakingapp.network.Module;
 import com.ely.bakingapp.network.RecepieClient;
 
+import java.util.ArrayList;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +33,8 @@ public class DisplayRecepiesPresnterImpl implements DisaplyRecepiesPresenter{
         recepieResultsCall.enqueue(new Callback<RecepieResults>() {
             @Override
             public void onResponse(Call<RecepieResults> call, Response<RecepieResults> response) {
+                RecepieResults recepieResults = response.body();
+                view.getRecepies(recepieResults);
 
             }
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/recepie_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:textSize="18sp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/servingsnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignStart="@+id/recepie_name"
+        android:layout_below="@+id/recepie_name"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="20dp"
+
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/servings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="servings"
+        android:layout_alignBaseline="@+id/servingsnum"
+        android:layout_alignBottom="@+id/servingsnum"
+        android:layout_alignStart="@+id/recepie_name"
+        />
+</RelativeLayout>

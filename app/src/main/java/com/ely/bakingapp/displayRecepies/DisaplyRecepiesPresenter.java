@@ -9,4 +9,5 @@ import com.ely.bakingapp.network.RecepieClient;
 public interface DisaplyRecepiesPresenter {
     RecepieClient setupRetrofitClient();
     void executeCall();
+    void setView(DisplayRecepiesView view);
 }
