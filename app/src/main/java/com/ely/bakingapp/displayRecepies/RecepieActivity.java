@@ -1,9 +1,11 @@
-package com.ely.bakingapp;
+package com.ely.bakingapp.displayRecepies;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.ely.bakingapp.R;
+
+public class RecepieActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
