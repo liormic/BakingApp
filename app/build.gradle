@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'

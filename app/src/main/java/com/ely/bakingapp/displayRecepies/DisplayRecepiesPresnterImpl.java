@@ -1,6 +1,6 @@
 package com.ely.bakingapp.displayRecepies;
 
-import com.ely.bakingapp.RecepieResults;
+import com.ely.bakingapp.RecepieObject;
 import com.ely.bakingapp.network.CallInterceptor;
 import com.ely.bakingapp.network.Module;
 import com.ely.bakingapp.network.RecepieClient;
@@ -29,18 +29,18 @@ public class DisplayRecepiesPresnterImpl implements DisaplyRecepiesPresenter{
     @Override
     public void executeCall() {
 
-        Call<RecepieResults> recepieResultsCall = setupRetrofitClient().getRecepieObjects();
-        recepieResultsCall.enqueue(new Callback<RecepieResults>() {
+        Call<ArrayList<RecepieObject>> recepieResultsCall = setupRetrofitClient().getRecepies();
+        recepieResultsCall.enqueue(new Callback<ArrayList<RecepieObject>>() {
             @Override
-            public void onResponse(Call<RecepieResults> call, Response<RecepieResults> response) {
-                RecepieResults recepieResults = response.body();
-                view.getRecepies(recepieResults);
+            public void onResponse(Call<ArrayList<RecepieObject>> call, Response<ArrayList<RecepieObject>> response) {
+                ArrayList<RecepieObject> RecepieObject  = response.body();
+                view.getRecepies(RecepieObject);
 
             }
 
             @Override
-            public void onFailure(Call<RecepieResults> call, Throwable t) {
-
+            public void onFailure(Call<ArrayList<RecepieObject>> call, Throwable t) {
+               t.printStackTrace();
             }
         });
 

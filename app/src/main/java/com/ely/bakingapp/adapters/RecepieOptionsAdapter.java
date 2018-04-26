@@ -11,38 +11,38 @@ import com.ely.bakingapp.RecepieObject;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-
 /**
- * Created by lior on 4/23/18.
+ * Created by Lior on 4/25/2018.
  */
 
-public class RecepieAdapter extends RecyclerView.Adapter<RecepieAdapter.ViewHolder> {
+public class RecepieOptionsAdapter extends RecyclerView.Adapter<RecepieOptionsAdapter.ViewHolder>{
+    private RecepieOptionsAdapter.ListItemClickListener listItemClickListener;
     private ArrayList<RecepieObject> recepieObjects;
-    private ListItemClickListener listItemClickListener;
-    public RecepieAdapter(ArrayList<RecepieObject> recepieObjects, ListItemClickListener listItemClickListener) {
-        this.recepieObjects = recepieObjects;
+    private int stepPosition;
+
+    public RecepieOptionsAdapter(ArrayList<RecepieObject> recepieObjects, ListItemClickListener listItemClickListener, int stepPosition) {
         this.listItemClickListener = listItemClickListener;
+        this.recepieObjects = recepieObjects;
+        this.stepPosition = stepPosition;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recpie_ltem_layout, parent, false);
-        ButterKnife.bind(this,rootView);
+        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recepie_step_item_layout,parent,false);
         return new ViewHolder(rootView);
     }
 
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.recpieName.setText(recepieObjects.get(position).getName());
-        holder.servingsNum.setText(recepieObjects.get(position).getServings());
+      holder.stepName.setText(recepieObjects.get(stepPosition).getSteps().get(position).getShortDescription());
     }
-
 
     @Override
     public int getItemCount() {
-        return recepieObjects.size();
+        return recepieObjects.get(stepPosition).getSteps().size();
     }
+
 
     public interface ListItemClickListener {
         void onListItemClick(int clickedItemIndex);
@@ -50,21 +50,18 @@ public class RecepieAdapter extends RecyclerView.Adapter<RecepieAdapter.ViewHold
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-         TextView recpieName;
-         TextView servingsNum;
+        TextView stepName;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            recpieName = itemView.findViewById(R.id.recepie_name);
-            servingsNum = itemView.findViewById(R.id.servingsnum);
+            stepName = itemView.findViewById(R.id.step_name);
             itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             listItemClickListener.onListItemClick(clickedPosition);
         }
     }
-
 }
