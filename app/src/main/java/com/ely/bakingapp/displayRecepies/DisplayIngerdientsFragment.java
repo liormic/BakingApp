@@ -2,6 +2,7 @@ package com.ely.bakingapp.displayRecepies;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +20,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Lior on 4/25/2018.
- */
 
 public class DisplayIngerdientsFragment extends Fragment {
     private ArrayList<RecepieObject> recepieObjects;
     private int stepPosition;
+    public static final String RV_STATE_STRING ="State_String";
     @BindView(R.id.rv_ingredients)RecyclerView recyclerView;
 
     @Override
@@ -33,6 +32,7 @@ public class DisplayIngerdientsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(getActivity().getString(R.string.recepies),recepieObjects);
         outState.putInt("step_position",stepPosition);
+        outState.putParcelable(RV_STATE_STRING, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -43,6 +43,16 @@ public class DisplayIngerdientsFragment extends Fragment {
             recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
         }
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null) {
+            initRecyclerView();
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(RV_STATE_STRING);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+        }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,10 +68,13 @@ public class DisplayIngerdientsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recepie_fragment_ingredients,container,false);
-        ButterKnife.bind(this, rootView);
-        initRecyclerView();
-        return rootView;
+
+           View rootView = inflater.inflate(R.layout.recepie_fragment_ingredients, container, false);
+           ButterKnife.bind(this, rootView);
+        if(savedInstanceState==null) {
+            initRecyclerView();
+        }
+           return rootView;
 
     }
 

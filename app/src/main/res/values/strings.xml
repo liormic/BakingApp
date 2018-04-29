@@ -2,4 +2,6 @@
     <string name="app_name">BakingApp</string>
     <string name="recepies">Recepies</string>
     <string name="ingredients">Ingredients</string>
+    <string name="step_position">step_position</string>
+    <string name="clicked_step">clicked_step</string>
 </resources>

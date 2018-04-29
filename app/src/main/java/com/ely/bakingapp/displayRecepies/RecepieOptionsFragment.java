@@ -2,6 +2,7 @@ package com.ely.bakingapp.displayRecepies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,17 +26,48 @@ import butterknife.ButterKnife;
 public class RecepieOptionsFragment extends android.app.Fragment implements RecepieOptionsAdapter.ListItemClickListener {
     private ArrayList<RecepieObject> recepieObjects;
     private int stepPosition;
+    public static final String RV_STATE_STRING_Options ="State_String";
     @BindView(R.id.rv_steps)RecyclerView recyclerView;
     @BindView(R.id.ingredients)TextView ingredientsView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        stepPosition = bundle.getInt("step_position");
+        stepPosition = bundle.getInt(getActivity().getString(R.string.step_position));
         recepieObjects = bundle.getParcelableArrayList(getActivity().getString(R.string.recepies));
         RecepieOptionsAdapter recepieOptionsAdapter = new RecepieOptionsAdapter(recepieObjects, this,stepPosition);
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getActivity().getString(R.string.recepies),recepieObjects);
+        outState.putInt(getActivity().getString(R.string.step_position),stepPosition);
+        outState.putParcelable(RV_STATE_STRING_Options, recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState!=null){
+            stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
+            recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null) {
+            initRecyclerView();
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(RV_STATE_STRING_Options);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+
+
 
     @Nullable
     @Override
@@ -48,7 +80,7 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(getActivity().getString(R.string.recepies),recepieObjects);
-                bundle.putInt("step_position",stepPosition);
+                bundle.putInt(getActivity().getString(R.string.step_position),stepPosition);
                 ((RecepieActivity)getActivity()).startFragment(bundle);
             }
         });
@@ -70,11 +102,13 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
 
     }
 
-
-
     @Override
     public void onListItemClick(int clickedItemIndex) {
+
         Intent intent = new Intent(getActivity(),DisplayStepDetailsActivity.class);
+        intent.putParcelableArrayListExtra(getActivity().getString(R.string.recepies),recepieObjects);
+        intent.putExtra(getActivity().getString(R.string.step_position),stepPosition);
+        intent.putExtra(getActivity().getString(R.string.clicked_step),clickedItemIndex);
         getActivity().startActivity(intent);
     }
 

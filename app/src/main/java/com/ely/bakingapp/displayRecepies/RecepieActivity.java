@@ -12,21 +12,19 @@ import java.util.ArrayList;
 public class RecepieActivity extends AppCompatActivity implements DisplayRecepiesView {
     DisplayRecepiesPresnterImpl disaplyRecepiesPresenterImpl = new DisplayRecepiesPresnterImpl();
     private ArrayList<RecepieObject> recepieObjects;
+    public android.app.Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         disaplyRecepiesPresenterImpl.setView(this);
-        disaplyRecepiesPresenterImpl.executeCall();
 
+        if (getFragmentManager().getBackStackEntryCount()==0 ) {
+            disaplyRecepiesPresenterImpl.executeCall();
+        }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getFragmentManager().putFragment();
-    }
 
     public void initFragment(ArrayList<RecepieObject> recepieResults) {
         Bundle bundle = new Bundle();
