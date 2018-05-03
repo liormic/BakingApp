@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
 import com.ely.bakingapp.adapters.RecepieAdapter;
+import com.ely.bakingapp.widget.RecepieWidgetProvider;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class DisplayRecepiesFragment extends android.app.Fragment implements Vie
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         recepieObjects = bundle.getParcelableArrayList(getActivity().getString(R.string.recepies));
+
         RecepieAdapter recepieAdapter = new RecepieAdapter(recepieObjects, this);
 
     }

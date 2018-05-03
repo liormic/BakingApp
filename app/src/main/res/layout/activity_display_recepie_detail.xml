@@ -13,5 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
+    <TextView
+        android:id="@+id/recepie_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/next_recepie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="@string/next_step" />
+
 
 </LinearLayout>

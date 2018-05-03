@@ -4,4 +4,12 @@
     <string name="ingredients">Ingredients</string>
     <string name="step_position">step_position</string>
     <string name="clicked_step">clicked_step</string>
+    <string name="pause">pause</string>
+    <string name="play">play</string>
+    <string name="video_notification">Recepie Video</string>
+    <string name="error_uri">Recepie Video is not avaliable</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="next_step">Next Step</string>
+    <string name="no_description">Unfortunately the recepie description is not Available</string>
 </resources>
