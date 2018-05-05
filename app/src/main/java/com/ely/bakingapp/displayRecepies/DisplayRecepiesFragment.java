@@ -14,6 +14,7 @@ import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
 import com.ely.bakingapp.adapters.RecepieAdapter;
 import com.ely.bakingapp.widget.RecepieWidgetProvider;
+import com.ely.bakingapp.widget.RecepieWidgetService;
 
 import java.util.ArrayList;
 

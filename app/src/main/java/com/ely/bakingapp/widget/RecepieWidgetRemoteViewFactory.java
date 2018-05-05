@@ -2,6 +2,7 @@ package com.ely.bakingapp.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -17,11 +18,13 @@ import java.util.ArrayList;
 public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
-    private ArrayList<RecepieObject> recepieObjects;
+     ArrayList<RecepieObject> recepieObjectsList;
 
     public RecepieWidgetRemoteViewFactory(Context context, Intent intent) {
         this.context = context;
-         recepieObjects = RecepieWidgetProvider.getRecepieObjects();
+
+//        Bundle bundle = intent.getExtras();
+//      recepieObjects = bundle.getParcelableArrayList("recepie_objects");
 
     }
 
@@ -34,7 +37,9 @@ public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.Remote
     @Override
     public void onDataSetChanged() {
 
-    }
+            recepieObjectsList = RecepieWidgetProvider.recepieObjects;
+
+        }
 
     @Override
     public void onDestroy() {
@@ -43,17 +48,13 @@ public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.Remote
 
     @Override
     public int getCount() {
-        if(RecepieWidgetProvider.getRecepieObjects()!=null) {
-            int size = RecepieWidgetProvider.getRecepieObjects().size();
-            return size;
-        }else
-            return 4;
+      return recepieObjectsList.size();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews rv  = new RemoteViews(context.getPackageName(), R.layout.recepie_widget_item);
-        rv.setTextViewText(R.id.widget_recepie_item,recepieObjects.get(position).getName());
+        rv.setTextViewText(R.id.widget_recepie_item,recepieObjectsList.get(position).getName());
         return rv;
     }
 
@@ -69,7 +70,7 @@ public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.Remote
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

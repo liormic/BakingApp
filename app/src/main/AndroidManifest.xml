@@ -39,6 +39,7 @@
 
         <service android:name=".widget.RecepieRemoteViewWidget"
         android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".widget.RecepieWidgetService" />
 
 
     </application>

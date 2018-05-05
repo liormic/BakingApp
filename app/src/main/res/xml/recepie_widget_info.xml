@@ -2,9 +2,10 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/recepie_widget"
     android:initialLayout="@layout/recepie_widget"
-    android:minHeight="40dp"
-    android:minWidth="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
-    android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
+    android:minWidth="120.0dp"
+    android:minHeight="200.0dp"
+    android:minResizeWidth="146.0dp"
+    android:minResizeHeight="72.0dp"
     android:widgetCategory="home_screen" />
