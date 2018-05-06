@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".displayRecepies.RecepieActivity">
+        <activity android:name=".displayRecepies.RecepieActivity"
+
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,6 +29,7 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".widget.RecepieWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -39,9 +42,12 @@
 
         <service android:name=".widget.RecepieRemoteViewWidget"
         android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <service android:name=".widget.RecepieWidgetService" />
 
 
     </application>
+
+
 
 </manifest>

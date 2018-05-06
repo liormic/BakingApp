@@ -6,14 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
-import com.ely.bakingapp.widget.RecepieWidgetProvider;
-import com.ely.bakingapp.widget.RecepieWidgetService;
 
 import java.util.ArrayList;
 
 public class RecepieActivity extends AppCompatActivity implements DisplayRecepiesView {
     DisplayRecepiesPresnterImpl disaplyRecepiesPresenterImpl = new DisplayRecepiesPresnterImpl();
-    private ArrayList<RecepieObject> recepieObjects;
+    public static ArrayList<RecepieObject> recepieObjects;
     public android.app.Fragment fragment;
 
     @Override
@@ -55,8 +53,8 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
     @Override
     public void getRecepies( ArrayList<RecepieObject> recepieResults) {
         recepieObjects = recepieResults;
-        RecepieWidgetService.startRecepieWidgetService(this,recepieObjects);
         initFragment(recepieObjects);
     }
+
 
 }

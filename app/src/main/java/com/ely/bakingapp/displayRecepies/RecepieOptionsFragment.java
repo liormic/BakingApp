@@ -12,11 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ely.bakingapp.Ingredients;
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
 import com.ely.bakingapp.adapters.RecepieOptionsAdapter;
+import com.ely.bakingapp.widget.RecepieWidgetService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +28,7 @@ import butterknife.ButterKnife;
 
 public class RecepieOptionsFragment extends android.app.Fragment implements RecepieOptionsAdapter.ListItemClickListener {
     private ArrayList<RecepieObject> recepieObjects;
+    public static List <Ingredients> ingredientsList;
     private int stepPosition;
     public static final String RV_STATE_STRING_Options ="State_String";
     @BindView(R.id.rv_steps)RecyclerView recyclerView;
@@ -35,6 +39,10 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
         Bundle bundle = getArguments();
         stepPosition = bundle.getInt(getActivity().getString(R.string.step_position));
         recepieObjects = bundle.getParcelableArrayList(getActivity().getString(R.string.recepies));
+        ingredientsList = recepieObjects.get(stepPosition).getIngredients();
+        ArrayList ingredientsArrayList = new ArrayList<Ingredients>();
+        ingredientsArrayList.addAll(ingredientsList);
+        RecepieWidgetService.startRecepieWidgetService(getActivity(),ingredientsArrayList);
         RecepieOptionsAdapter recepieOptionsAdapter = new RecepieOptionsAdapter(recepieObjects, this,stepPosition);
 
     }

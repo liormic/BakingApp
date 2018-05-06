@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.ely.bakingapp.Ingredients;
 import com.ely.bakingapp.R;
-import com.ely.bakingapp.RecepieObject;
+import com.ely.bakingapp.displayRecepies.RecepieOptionsFragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lior on 5/2/2018.
@@ -18,14 +19,10 @@ import java.util.ArrayList;
 public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
-     ArrayList<RecepieObject> recepieObjectsList;
+     List<Ingredients> ingredientsList;
 
     public RecepieWidgetRemoteViewFactory(Context context, Intent intent) {
         this.context = context;
-
-//        Bundle bundle = intent.getExtras();
-//      recepieObjects = bundle.getParcelableArrayList("recepie_objects");
-
     }
 
 
@@ -37,7 +34,8 @@ public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.Remote
     @Override
     public void onDataSetChanged() {
 
-            recepieObjectsList = RecepieWidgetProvider.recepieObjects;
+        ingredientsList = RecepieOptionsFragment.ingredientsList;
+
 
         }
 
@@ -48,14 +46,27 @@ public class RecepieWidgetRemoteViewFactory implements RemoteViewsService.Remote
 
     @Override
     public int getCount() {
-      return recepieObjectsList.size();
+        try {
+            return ingredientsList.size();
+        }catch (Exception e){
+           return 4;
+        }
+
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
+
         RemoteViews rv  = new RemoteViews(context.getPackageName(), R.layout.recepie_widget_item);
-        rv.setTextViewText(R.id.widget_recepie_item,recepieObjectsList.get(position).getName());
+
+        rv.setTextViewText(R.id.widget_recepie_item,ingredientsList.get(position).getIngredient());
+        Bundle extras = new Bundle();
+        extras.putLong(RecepieWidgetProvider.RECEPIE_ID, position);
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        rv.setOnClickFillInIntent(R.id.widget_recepie_item, fillInIntent);
         return rv;
+
     }
 
     @Override
