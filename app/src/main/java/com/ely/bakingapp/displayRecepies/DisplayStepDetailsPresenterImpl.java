@@ -20,15 +20,15 @@ public class DisplayStepDetailsPresenterImpl implements DisplayStepDetailsPresen
                                 PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         mediaSessionCompat.setPlaybackState(stateBuilder.build());
-        mediaSessionCompat.setCallback(new DisplayStepDetailsActivity.sessionCallBack());
+        mediaSessionCompat.setCallback(new DisplayStepDetailsFragment.sessionCallBack());
         mediaSessionCompat.setActive(true);
     }
 
     @Override
     public void releasePlayer() {
-        DisplayStepDetailsActivity.simpleExoPlayer.stop();
-        DisplayStepDetailsActivity.simpleExoPlayer.release();
-        DisplayStepDetailsActivity.simpleExoPlayer = null;
+        DisplayStepDetailsFragment.simpleExoPlayer.stop();
+        DisplayStepDetailsFragment.simpleExoPlayer.release();
+        DisplayStepDetailsFragment.simpleExoPlayer = null;
     }
 
     @Override

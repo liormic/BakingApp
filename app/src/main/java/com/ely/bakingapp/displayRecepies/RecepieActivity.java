@@ -1,6 +1,7 @@
 package com.ely.bakingapp.displayRecepies;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,18 +18,24 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
     DisplayRecepiesPresnterImpl disaplyRecepiesPresenterImpl = new DisplayRecepiesPresnterImpl();
     public static ArrayList<RecepieObject> recepieObjects;
     public android.app.Fragment fragment;
+    public boolean isTabletLayout;
     @Nullable
     private SimpleIdilingResource mIdlingResource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(isTablet(this)){
+            isTabletLayout = true;
+        }
+
         disaplyRecepiesPresenterImpl.setView(this);
 
         if (getFragmentManager().getBackStackEntryCount()==0 ) {
             disaplyRecepiesPresenterImpl.executeCall();
         }
         getIdlingResource();
+
     }
 
     @Override
@@ -69,6 +76,10 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
     public void getRecepies( ArrayList<RecepieObject> recepieResults) {
         recepieObjects = recepieResults;
         initFragment(recepieObjects);
+    }
+
+    public static boolean isTablet(Context context) {
+        return context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
     }
 
 

@@ -1,5 +1,6 @@
 package com.ely.bakingapp.displayRecepies;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -113,11 +114,18 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
-        Intent intent = new Intent(getActivity(),DisplayStepDetailsActivity.class);
-        intent.putParcelableArrayListExtra(getActivity().getString(R.string.recepies),recepieObjects);
-        intent.putExtra(getActivity().getString(R.string.step_position),stepPosition);
-        intent.putExtra(getActivity().getString(R.string.clicked_step),clickedItemIndex);
-        getActivity().startActivity(intent);
+
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(getActivity().getString(R.string.recepies),recepieObjects);
+        bundle.putInt(getActivity().getString(R.string.step_position),stepPosition);
+        bundle.putInt(getActivity().getString(R.string.clicked_step),clickedItemIndex);
+        DisplayStepDetailsFragment displayStepDetailsFragment= new DisplayStepDetailsFragment();
+        FragmentTransaction fragmentTransaction =getActivity().getFragmentManager().beginTransaction();
+        displayStepDetailsFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.container, displayStepDetailsFragment, "Detail Fragment");
+        fragmentTransaction.addToBackStack("Detail Fragment");
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
 

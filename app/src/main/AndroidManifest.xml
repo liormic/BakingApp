@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".displayRecepies.DisplayStepDetailsActivity"
+            android:name=".displayRecepies.DisplayStepDetailsFragment"
             android:launchMode="singleTop" />
 
-        <receiver android:name="displayRecepies.DisplayStepDetailsActivity$MediaReceiver">
+        <receiver android:name=".displayRecepies.DisplayStepDetailsFragment$MediaReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
