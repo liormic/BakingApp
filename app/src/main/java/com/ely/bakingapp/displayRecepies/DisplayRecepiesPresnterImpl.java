@@ -1,6 +1,9 @@
 package com.ely.bakingapp.displayRecepies;
 
+import android.support.annotation.Nullable;
+
 import com.ely.bakingapp.RecepieObject;
+import com.ely.bakingapp.idilingResouce.SimpleIdilingResource;
 import com.ely.bakingapp.network.CallInterceptor;
 import com.ely.bakingapp.network.Module;
 import com.ely.bakingapp.network.RecepieClient;
@@ -21,6 +24,12 @@ public class DisplayRecepiesPresnterImpl implements DisaplyRecepiesPresenter{
 
     DisplayRecepiesView view;
 
+
+
+    @Nullable
+    SimpleIdilingResource simpleIdilingResource;
+
+
     @Override
     public void setView(DisplayRecepiesView view){
        this.view = view;
@@ -28,12 +37,17 @@ public class DisplayRecepiesPresnterImpl implements DisaplyRecepiesPresenter{
 
     @Override
     public void executeCall() {
-
+        simpleIdilingResource = (SimpleIdilingResource) view.getIdlingResource();
+        if (simpleIdilingResource != null) {
+            simpleIdilingResource.setIdleState(false);
+        }
         Call<ArrayList<RecepieObject>> recepieResultsCall = setupRetrofitClient().getRecepies();
         recepieResultsCall.enqueue(new Callback<ArrayList<RecepieObject>>() {
             @Override
             public void onResponse(Call<ArrayList<RecepieObject>> call, Response<ArrayList<RecepieObject>> response) {
                 ArrayList<RecepieObject> RecepieObject  = response.body();
+
+                simpleIdilingResource.setIdleState(true);
                 view.getRecepies(RecepieObject);
 
             }
@@ -53,6 +67,9 @@ public class DisplayRecepiesPresnterImpl implements DisaplyRecepiesPresenter{
         RecepieClient recepieClient = retrofit.create(RecepieClient.class);
         return recepieClient;
     }
+
+
+
 
 
 

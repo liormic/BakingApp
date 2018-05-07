@@ -1,5 +1,7 @@
 package com.ely.bakingapp.displayRecepies;
 
+import android.support.test.espresso.IdlingResource;
+
 import com.ely.bakingapp.RecepieObject;
 
 import java.util.ArrayList;
@@ -10,4 +12,5 @@ import java.util.ArrayList;
 
 public interface DisplayRecepiesView {
     void getRecepies( ArrayList<RecepieObject> recepieResults);
+    IdlingResource getIdlingResource();
 }
