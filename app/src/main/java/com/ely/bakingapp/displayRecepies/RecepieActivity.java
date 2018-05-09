@@ -2,6 +2,7 @@ package com.ely.bakingapp.displayRecepies;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,9 +32,15 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
 
         disaplyRecepiesPresenterImpl.setView(this);
 
-        if (getFragmentManager().getBackStackEntryCount()==0 ) {
+        if (getFragmentManager().getBackStackEntryCount()==0  ) {
             disaplyRecepiesPresenterImpl.executeCall();
         }
+        isTabletLayout = isTablet(this);
+        if(isTabletLayout){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+
         getIdlingResource();
 
     }
@@ -49,17 +56,26 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
     }
 
     public void initFragment(ArrayList<RecepieObject> recepieResults) {
-        Bundle bundle = new Bundle();
 
-        if (recepieResults != null) {
-            bundle.putParcelableArrayList(getString(R.string.recepies), recepieResults);
-            DisplayRecepiesFragment displayRecepiesFragment = new DisplayRecepiesFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            displayRecepiesFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.container, displayRecepiesFragment, "Display Recepies");
-            fragmentTransaction.addToBackStack("Display Recepies");
-            fragmentTransaction.commitAllowingStateLoss();
 
+                Bundle bundle = new Bundle();
+
+                bundle.putParcelableArrayList(getString(R.string.recepies), recepieResults);
+                DisplayRecepiesFragment displayRecepiesFragment = new DisplayRecepiesFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                displayRecepiesFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, displayRecepiesFragment, "Display Recepies");
+                fragmentTransaction.addToBackStack("Display Recepies");
+//                fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commitAllowingStateLoss();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
         }
     }
 
@@ -71,6 +87,8 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
         fragmentTransaction.addToBackStack("Display Ingredients");
         fragmentTransaction.commitAllowingStateLoss();
     }
+
+
 
     @Override
     public void getRecepies( ArrayList<RecepieObject> recepieResults) {

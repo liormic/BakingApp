@@ -8,7 +8,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
  */
 
 public class DisplayStepDetailsPresenterImpl implements DisplayStepDetailsPresenter {
-    DisplayStepDetailsActivityView view;
+    DisplayStepDetailsFragmentView view;
     @Override
     public void initMediaSeesion(MediaSessionCompat mediaSessionCompat) {
         mediaSessionCompat.setFlags(mediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |mediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
@@ -32,7 +32,7 @@ public class DisplayStepDetailsPresenterImpl implements DisplayStepDetailsPresen
     }
 
     @Override
-    public void setView(DisplayStepDetailsActivityView view) {
+    public void setView(DisplayStepDetailsFragmentView view) {
         this.view = view;
     }
 }

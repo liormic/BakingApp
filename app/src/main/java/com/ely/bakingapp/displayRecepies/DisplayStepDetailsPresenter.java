@@ -9,5 +9,5 @@ import android.support.v4.media.session.MediaSessionCompat;
 public interface DisplayStepDetailsPresenter {
     void initMediaSeesion(MediaSessionCompat mediaSessionCompat);
     void releasePlayer();
-    void setView(DisplayStepDetailsActivityView view);
+    void setView(DisplayStepDetailsFragmentView view);
 }

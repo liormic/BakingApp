@@ -7,7 +7,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
  * Created by Lior on 4/25/2018.
  */
 
-public interface DisplayStepDetailsActivityView {
+public interface DisplayStepDetailsFragmentView {
 
     void createNotification(PlaybackStateCompat state);
     void initPlayer(Uri uri);

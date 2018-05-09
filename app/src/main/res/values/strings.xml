@@ -13,5 +13,6 @@
     <string name="next_step">Next Step</string>
     <string name="no_description">Unfortunately the recepie description is not Available</string>
     <string name="ingredients_list">Ingredients List</string>
+    <string name="servings">Servings</string>
 
 </resources>

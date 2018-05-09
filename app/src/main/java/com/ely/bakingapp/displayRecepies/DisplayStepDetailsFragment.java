@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,14 +49,17 @@ import butterknife.ButterKnife;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 
-public class DisplayStepDetailsFragment extends Fragment implements Player.EventListener, DisplayStepDetailsActivityView {
+public class DisplayStepDetailsFragment extends Fragment implements Player.EventListener, DisplayStepDetailsFragmentView {
     public static final String CHANNEL_ID = "NOTIFICATION_ID";
     private static final String TAG = DisplayStepDetailsFragment.class.getCanonicalName();
     public static SimpleExoPlayer simpleExoPlayer;
     private static MediaSessionCompat mediaSessionCompat;
-    @BindView(R.id.player_view) PlayerView exoPlayerView;
-    @BindView(R.id.recepie_description) TextView recepieDescription;
-    @BindView(R.id.next_recepie) Button nextStepButton;
+    @BindView(R.id.player_view)
+    PlayerView exoPlayerView;
+    @BindView(R.id.recepie_description)
+    TextView recepieDescription;
+    @BindView(R.id.next_recepie)
+    Button nextStepButton;
     private PlaybackStateCompat.Builder stateBuilder;
     private ArrayList<RecepieObject> recepieObjects;
     private int stepPosition;
@@ -63,7 +68,6 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     private DisplayStepDetailsPresenterImpl presenter;
     private int clickedStepPosition;
     private boolean isUrlAvailable;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,8 +78,8 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_display_recepie_detail,container,false);
-        ButterKnife.bind(getActivity(),rootView);
+        View rootView = inflater.inflate(R.layout.display_recepie_fragment_detail, container, false);
+        ButterKnife.bind(this, rootView);
         presenter = new DisplayStepDetailsPresenterImpl();
         presenter.setView(this);
         Bundle bundle = getArguments();
@@ -95,37 +99,41 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
             urlNoAvialable();
         }
 
-        if(!stepDescriptionText.equals("")){
-            //  recepieDescription.setText(stepDescriptionText);
-        }else{
+        if (stepDescriptionText.equals("") || stepDescriptionText == null) {
             recepieDescription.setText(getResources().getString(R.string.no_description));
+
+        } else {
+            recepieDescription.setText(stepDescriptionText);
         }
 
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(simpleExoPlayer!=null) {
+                if (simpleExoPlayer != null) {
                     presenter.releasePlayer();
                 }
-                if(clickedStepPosition+1 < recepieObjects.get(stepPosition).getSteps().size()) {
-                    clickedStepPosition= clickedStepPosition+1;
-                    isUrlAvailable =true;
-                    initPlayer(Uri.parse(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL()));
-                    recepieDescription.setText(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription());
-                }else{
-                    clickedStepPosition = 0;
-                    initPlayer(Uri.parse(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL()));
-                    recepieDescription.setText(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription());
-                }
-
-
+                determainePosition();
             }
 
         });
         return rootView;
     }
 
-    private void urlNoAvialable(){
+
+    private void determainePosition() {
+        if (clickedStepPosition + 1 < recepieObjects.get(stepPosition).getSteps().size()) {
+            clickedStepPosition = clickedStepPosition + 1;
+            isUrlAvailable = true;
+            initPlayer(Uri.parse(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL()));
+            recepieDescription.setText(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription());
+        } else {
+            clickedStepPosition = 0;
+            initPlayer(Uri.parse(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL()));
+            recepieDescription.setText(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription());
+        }
+    }
+
+    private void urlNoAvialable() {
         exoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), R.drawable.ic_launcher_background));
         exoPlayerView.setUseArtwork(true);
@@ -148,14 +156,13 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     }
 
 
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (isUrlAvailable)
+        if (isUrlAvailable) {
             mediaSessionCompat.setActive(false);
             presenter.releasePlayer();
+        }
     }
 
     @Override
@@ -270,7 +277,32 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         public void onReceive(Context context, Intent intent) {
             MediaButtonReceiver.handleIntent(mediaSessionCompat, intent);
         }
+
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checking the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //First Hide other objects (listview or recyclerview), better hide them using Gone.
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=params.MATCH_PARENT;
+            exoPlayerView.setLayoutParams(params);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            //unhide your objects here.
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=600;
+            exoPlayerView.setLayoutParams(params);
+
+        }
     }
 
 }
+
+
 
