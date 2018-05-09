@@ -22,6 +22,7 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
     public boolean isTabletLayout;
     @Nullable
     private SimpleIdilingResource mIdlingResource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +67,7 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
                 displayRecepiesFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, displayRecepiesFragment, "Display Recepies");
                 fragmentTransaction.addToBackStack("Display Recepies");
-//                fragmentTransaction.commitAllowingStateLoss();
-        fragmentTransaction.commitAllowingStateLoss();
+                fragmentTransaction.commitAllowingStateLoss();
 
     }
 

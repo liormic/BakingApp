@@ -91,6 +91,9 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
         ButterKnife.bind(this, rootView);
         isTabletayout = isTablet(getActivity());
         initRecyclerView();
+        if(savedInstanceState!=null){
+            recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
+        }
         ingredientsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

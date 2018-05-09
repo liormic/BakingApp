@@ -68,12 +68,30 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     private DisplayStepDetailsPresenterImpl presenter;
     private int clickedStepPosition;
     private boolean isUrlAvailable;
-
+    Bundle bundle;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+         bundle = getArguments();
 
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getActivity().getString(R.string.recepies), recepieObjects);
+        outState.putInt(getActivity().getString(R.string.step_position), stepPosition);
+        outState.putInt(getActivity().getString(R.string.clicked_step), clickedStepPosition);
+    }
+
+
 
     @Nullable
     @Override
@@ -82,12 +100,21 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         ButterKnife.bind(this, rootView);
         presenter = new DisplayStepDetailsPresenterImpl();
         presenter.setView(this);
-        Bundle bundle = getArguments();
-        recepieObjects = bundle.getParcelableArrayList(getResources().getString(R.string.recepies));
-        stepPosition = bundle.getInt(getResources().getString(R.string.step_position), 0);
-        clickedStepPosition = bundle.getInt(getResources().getString(R.string.clicked_step), 0);
-        videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
+
+        if(savedInstanceState==null ) {
+            recepieObjects = bundle.getParcelableArrayList(getResources().getString(R.string.recepies));
+            stepPosition = bundle.getInt(getResources().getString(R.string.step_position), 0);
+            clickedStepPosition = bundle.getInt(getResources().getString(R.string.clicked_step), 0);
+        }else{
+            recepieObjects= savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
+            stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
+            clickedStepPosition = savedInstanceState.getInt(getActivity().getString(R.string.clicked_step));
+        }
+
+            videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
+
         stepDescriptionText = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription();
+
 
 
         if (!videoUrl.equals("")) {
@@ -119,6 +146,16 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         return rootView;
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null) {
+            recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
+            stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
+            clickedStepPosition = savedInstanceState.getInt(getActivity().getString(R.string.clicked_step));
+        }
+    }
 
     private void determainePosition() {
         if (clickedStepPosition + 1 < recepieObjects.get(stepPosition).getSteps().size()) {
