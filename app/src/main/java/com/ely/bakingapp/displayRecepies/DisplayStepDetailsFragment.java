@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -68,13 +69,16 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     private DisplayStepDetailsPresenterImpl presenter;
     private int clickedStepPosition;
     private boolean isUrlAvailable;
+    private LinearLayout.LayoutParams params;
+    private long positionPlayer;
     Bundle bundle;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
-         bundle = getArguments();
+        bundle = new Bundle();
+        bundle = getArguments();
 
     }
 
@@ -89,8 +93,8 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         outState.putParcelableArrayList(getActivity().getString(R.string.recepies), recepieObjects);
         outState.putInt(getActivity().getString(R.string.step_position), stepPosition);
         outState.putInt(getActivity().getString(R.string.clicked_step), clickedStepPosition);
+        outState.putLong("positionPlayer",positionPlayer);
     }
-
 
 
     @Nullable
@@ -100,27 +104,29 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         ButterKnife.bind(this, rootView);
         presenter = new DisplayStepDetailsPresenterImpl();
         presenter.setView(this);
-
-        if(savedInstanceState==null ) {
+        positionPlayer = C.TIME_UNSET;
+        if (savedInstanceState == null) {
             recepieObjects = bundle.getParcelableArrayList(getResources().getString(R.string.recepies));
+
             stepPosition = bundle.getInt(getResources().getString(R.string.step_position), 0);
             clickedStepPosition = bundle.getInt(getResources().getString(R.string.clicked_step), 0);
-        }else{
-            recepieObjects= savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
+        } else {
+            recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
             stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
             clickedStepPosition = savedInstanceState.getInt(getActivity().getString(R.string.clicked_step));
+            positionPlayer = savedInstanceState.getLong("positionPlayer");
         }
 
-            videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
+        videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
 
         stepDescriptionText = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription();
-
 
 
         if (!videoUrl.equals("")) {
             isUrlAvailable = true;
             mediaSessionCompat = new MediaSessionCompat(getActivity(), TAG);
             presenter.initMediaSeesion(mediaSessionCompat);
+
             initPlayer(Uri.parse(videoUrl));
         } else {
             urlNoAvialable();
@@ -150,7 +156,7 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     public void onViewStateRestored(Bundle savedInstanceState) {
 
         super.onViewStateRestored(savedInstanceState);
-        if(savedInstanceState!=null) {
+        if (savedInstanceState != null) {
             recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
             stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
             clickedStepPosition = savedInstanceState.getInt(getActivity().getString(R.string.clicked_step));
@@ -187,20 +193,31 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
             String userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(getActivity(), "BakingApp");
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+            if(positionPlayer!= C.TIME_UNSET)   simpleExoPlayer.seekTo(positionPlayer);
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
+
+        }
+
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ((RecepieActivity) getActivity()).getSupportActionBar().hide();
+            params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
+            params.width = params.MATCH_PARENT;
+            params.height = params.MATCH_PARENT;
+            exoPlayerView.setLayoutParams(params);
+
         }
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (isUrlAvailable) {
-            mediaSessionCompat.setActive(false);
-            presenter.releasePlayer();
-        }
-    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        if (isUrlAvailable) {
+//            mediaSessionCompat.setActive(false);
+//            presenter.releasePlayer();
+//        }
+//    }
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
@@ -319,23 +336,20 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public void onResume() {
+        super.onResume();
+        if (videoUrl != null)
+            initPlayer(Uri.parse(videoUrl));
+    }
 
-        // Checking the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //First Hide other objects (listview or recyclerview), better hide them using Gone.
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=params.MATCH_PARENT;
-            exoPlayerView.setLayoutParams(params);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            //unhide your objects here.
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=600;
-            exoPlayerView.setLayoutParams(params);
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (simpleExoPlayer != null) {
+            positionPlayer = simpleExoPlayer.getCurrentPosition();
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
         }
     }
 

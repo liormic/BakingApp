@@ -54,11 +54,11 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
     public void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);
-        if(recyclerView!=null) {
+
             outState.putParcelableArrayList(getActivity().getString(R.string.recepies), recepieObjects);
             outState.putInt(getActivity().getString(R.string.step_position), stepPosition);
 
-        }
+
     }
 
     @Override
@@ -129,6 +129,7 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
+
 
 
 
