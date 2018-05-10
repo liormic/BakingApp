@@ -14,5 +14,9 @@
     <string name="no_description">Unfortunately the recepie description is not Available</string>
     <string name="ingredients_list">Ingredients List</string>
     <string name="servings">Servings</string>
+    <string name="di">Display Ingredients</string>
+    <string name="dr">Display Recepies</string>
+    <string name="df">Detail Fragment</string>
+    <string name="ds">Display Steps</string>
 
 </resources>

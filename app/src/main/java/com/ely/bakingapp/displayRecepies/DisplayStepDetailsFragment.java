@@ -70,7 +70,7 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     private int clickedStepPosition;
     private boolean isUrlAvailable;
     private LinearLayout.LayoutParams params;
-    private long positionPlayer;
+    private  long   positionPlayer = C.TIME_UNSET;
     Bundle bundle;
 
     @Override
@@ -90,10 +90,11 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         outState.putParcelableArrayList(getActivity().getString(R.string.recepies), recepieObjects);
         outState.putInt(getActivity().getString(R.string.step_position), stepPosition);
         outState.putInt(getActivity().getString(R.string.clicked_step), clickedStepPosition);
-        outState.putLong("positionPlayer",positionPlayer);
+
     }
 
 
@@ -104,7 +105,7 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         ButterKnife.bind(this, rootView);
         presenter = new DisplayStepDetailsPresenterImpl();
         presenter.setView(this);
-        positionPlayer = C.TIME_UNSET;
+
         if (savedInstanceState == null) {
             recepieObjects = bundle.getParcelableArrayList(getResources().getString(R.string.recepies));
 
@@ -114,7 +115,7 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
             recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
             stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
             clickedStepPosition = savedInstanceState.getInt(getActivity().getString(R.string.clicked_step));
-            positionPlayer = savedInstanceState.getLong("positionPlayer");
+
         }
 
         videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
@@ -193,9 +194,14 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
             String userAgent = com.google.android.exoplayer2.util.Util.getUserAgent(getActivity(), "BakingApp");
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-            if(positionPlayer!= C.TIME_UNSET)   simpleExoPlayer.seekTo(positionPlayer);
-            simpleExoPlayer.prepare(mediaSource);
+            if (positionPlayer != C.TIME_UNSET) {
+                simpleExoPlayer.prepare(mediaSource);
+                simpleExoPlayer.seekTo(positionPlayer);
+                simpleExoPlayer.setPlayWhenReady(true);
+            } else{
+                simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
+        }
 
         }
 
@@ -209,15 +215,6 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         }
     }
 
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        if (isUrlAvailable) {
-//            mediaSessionCompat.setActive(false);
-//            presenter.releasePlayer();
-//        }
-//    }
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {

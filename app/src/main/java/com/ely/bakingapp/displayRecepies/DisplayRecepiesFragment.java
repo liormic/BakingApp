@@ -76,8 +76,8 @@ public class DisplayRecepiesFragment extends android.app.Fragment implements Vie
         RecepieOptionsFragment recepieOptionsFragment = new RecepieOptionsFragment();
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
         recepieOptionsFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, recepieOptionsFragment, "Display Steps");
-        fragmentTransaction.addToBackStack("Display Steps");
+        fragmentTransaction.replace(R.id.container, recepieOptionsFragment, getString(R.string.ds));
+        fragmentTransaction.addToBackStack(getString(R.string.ds));
         fragmentTransaction.commitAllowingStateLoss();
     }
 

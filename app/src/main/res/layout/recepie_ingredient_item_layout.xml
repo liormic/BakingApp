@@ -7,22 +7,25 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:layout_marginBottom="8dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginTop="8dp"
         android:elevation="4dp"
 
         >
         <LinearLayout
             android:layout_width="match_parent"
+            android:background="@color/colorAccent"
             android:orientation="vertical"
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/ingredient_name"
                 android:layout_width="match_parent"
+                android:textColor="@color/WHITE"
+                android:textSize="@dimen/textsize_item"
                 android:layout_marginTop="3dp"
                 android:gravity="center"
                 android:layout_height="wrap_content" />
@@ -30,13 +33,17 @@
             <TextView
                 android:id="@+id/measure"
                 android:layout_width="match_parent"
+                android:textColor="@color/WHITE"
                 android:layout_marginTop="3dp"
+                android:textSize="@dimen/textsize_item"
                 android:gravity="center"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/quantity"
                 android:layout_marginTop="3dp"
+                android:textColor="@color/WHITE"
+                android:textSize="@dimen/textsize_item"
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:layout_height="wrap_content" />

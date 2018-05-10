@@ -16,6 +16,7 @@ import com.ely.bakingapp.RecepieObject;
 import com.ely.bakingapp.adapters.RecepieIngredientsAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +25,9 @@ import butterknife.ButterKnife;
 public class DisplayIngerdientsFragment extends Fragment {
     private ArrayList<RecepieObject> recepieObjects;
     private int stepPosition;
+    private LinearLayoutManager linearLayoutManager;
     public static final String RV_STATE_STRING ="State_String";
+    private Bundle rvState;
     @BindView(R.id.rv_ingredients)RecyclerView recyclerView;
 
     @Override
@@ -76,11 +79,12 @@ public class DisplayIngerdientsFragment extends Fragment {
         }
            return rootView;
 
+
     }
 
 
     private void initRecyclerView(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+         linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -93,6 +97,29 @@ public class DisplayIngerdientsFragment extends Fragment {
 
 
 
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        // save RecyclerView state
+        rvState = new Bundle();
+        Parcelable listingState = recyclerView.getLayoutManager().onSaveInstanceState();
+        rvState.putParcelable(RV_STATE_STRING, listingState);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // restore RecyclerView state
+        if (rvState != null) {
+            Parcelable listState = rvState.getParcelable(RV_STATE_STRING);
+            recyclerView.getLayoutManager().onRestoreInstanceState(listState);
+        }
+    }
 }
 
 
