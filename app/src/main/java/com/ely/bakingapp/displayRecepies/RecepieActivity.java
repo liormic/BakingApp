@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
@@ -79,6 +82,12 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
         }
     }
 
+
+    public void setHomeButton(boolean isShown){
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(isShown);
+
+    }
     public void startFragment(Bundle bundle) {
         DisplayIngerdientsFragment displayIngerdientsFragment = new DisplayIngerdientsFragment();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -97,6 +106,18 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
 
     public static boolean isTablet(Context context) {
         return context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 

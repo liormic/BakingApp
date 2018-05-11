@@ -94,6 +94,7 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
         if (savedInstanceState != null) {
             recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
         }
+        ((RecepieActivity)getActivity()).setHomeButton(true);
         ingredientsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,10 +15,12 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -61,6 +64,8 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     TextView recepieDescription;
     @BindView(R.id.next_recepie)
     Button nextStepButton;
+    @BindView(R.id.thumbnail)
+    ImageView thumbNail;
     private PlaybackStateCompat.Builder stateBuilder;
     private ArrayList<RecepieObject> recepieObjects;
     private int stepPosition;
@@ -71,6 +76,7 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
     private boolean isUrlAvailable;
     private LinearLayout.LayoutParams params;
     private  long   positionPlayer = C.TIME_UNSET;
+    private static boolean isPlaying;
     Bundle bundle;
 
     @Override
@@ -108,9 +114,10 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
 
         if (savedInstanceState == null) {
             recepieObjects = bundle.getParcelableArrayList(getResources().getString(R.string.recepies));
-
             stepPosition = bundle.getInt(getResources().getString(R.string.step_position), 0);
             clickedStepPosition = bundle.getInt(getResources().getString(R.string.clicked_step), 0);
+
+
         } else {
             recepieObjects = savedInstanceState.getParcelableArrayList(getActivity().getString(R.string.recepies));
             stepPosition = savedInstanceState.getInt(getActivity().getString(R.string.step_position));
@@ -121,7 +128,11 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         videoUrl = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getVideoURL();
 
         stepDescriptionText = recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getDescription();
-
+        if( TextUtils.isEmpty(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getThumbnailURL())){
+            thumbNail.setVisibility(View.GONE);
+        }else {
+            Picasso.get().load(recepieObjects.get(stepPosition).getSteps().get(clickedStepPosition).getThumbnailURL()).into(thumbNail);
+        }
 
         if (!videoUrl.equals("")) {
             isUrlAvailable = true;
@@ -337,6 +348,8 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
         super.onResume();
         if (videoUrl != null)
             initPlayer(Uri.parse(videoUrl));
+            simpleExoPlayer.setPlayWhenReady(isPlaying);
+
     }
 
     @Override
@@ -346,7 +359,12 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
             positionPlayer = simpleExoPlayer.getCurrentPosition();
             simpleExoPlayer.stop();
             simpleExoPlayer.release();
-            simpleExoPlayer = null;
+
+             isPlaying = simpleExoPlayer.getPlayWhenReady();
+//            simpleExoPlayer.getPlayWhenReady();
+              simpleExoPlayer = null;
+
+
         }
     }
 

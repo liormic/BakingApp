@@ -8,10 +8,22 @@
     tools:context="com.ely.bakingapp.displayRecepies.DisplayStepDetailsFragment">
 
 
+
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="200dp">
+
+
+    </com.google.android.exoplayer2.ui.PlayerView>
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher" />
+
+
+
 
     <TextView
         android:id="@+id/recepie_description"
@@ -20,17 +32,19 @@
         android:textSize="18sp"
         android:textColor="@color/Black"
         android:layout_height="wrap_content"
-     />
+        />
 
     <Button
-        android:layout_marginTop="5dp"
         android:id="@+id/next_recepie"
-        android:background="@color/cardview_light_background"
         android:layout_width="match_parent"
-        android:elevation="4dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
+        android:background="@color/cardview_light_background"
+        android:elevation="4dp"
         android:text="@string/next_step" />
+
+
 
 
 </LinearLayout>

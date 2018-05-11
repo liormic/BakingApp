@@ -1,13 +1,16 @@
 package com.ely.bakingapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,12 @@ public class RecepieAdapter extends RecyclerView.Adapter<RecepieAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.recpieName.setText(recepieObjects.get(position).getName());
         holder.servingsNum.setText(recepieObjects.get(position).getServings());
+        if( TextUtils.isEmpty(recepieObjects.get(position).getImage())){
+           holder.imageView.setVisibility(View.GONE);
+        }else {
+            Picasso.get().load(recepieObjects.get(position).getImage()).into(holder.imageView);
+        }
+
     }
 
 
@@ -52,11 +61,13 @@ public class RecepieAdapter extends RecyclerView.Adapter<RecepieAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
          TextView recpieName;
          TextView servingsNum;
+         ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             recpieName = itemView.findViewById(R.id.recepie_name);
             servingsNum = itemView.findViewById(R.id.servingsnum);
+            imageView = itemView.findViewById(R.id.imageId);
             itemView.setOnClickListener(this);
         }
 

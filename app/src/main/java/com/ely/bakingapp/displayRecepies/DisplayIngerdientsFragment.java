@@ -103,7 +103,6 @@ public class DisplayIngerdientsFragment extends Fragment {
     {
         super.onPause();
 
-        // save RecyclerView state
         rvState = new Bundle();
         Parcelable listingState = recyclerView.getLayoutManager().onSaveInstanceState();
         rvState.putParcelable(RV_STATE_STRING, listingState);
@@ -114,7 +113,7 @@ public class DisplayIngerdientsFragment extends Fragment {
     {
         super.onResume();
 
-        // restore RecyclerView state
+
         if (rvState != null) {
             Parcelable listState = rvState.getParcelable(RV_STATE_STRING);
             recyclerView.getLayoutManager().onRestoreInstanceState(listState);

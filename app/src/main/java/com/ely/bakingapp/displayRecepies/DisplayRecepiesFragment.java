@@ -39,6 +39,7 @@ public class DisplayRecepiesFragment extends android.app.Fragment implements Vie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recepie_fragment, container, false);
         ButterKnife.bind(this, rootView);
+        ((RecepieActivity)getActivity()).setHomeButton(false);
         initRecyclerView();
         return rootView;
 
