@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.ely.bakingapp.R;
 import com.ely.bakingapp.RecepieObject;
@@ -32,17 +30,18 @@ public class RecepieActivity extends AppCompatActivity implements DisplayRecepie
         setContentView(R.layout.activity_main);
         if (isTablet(this)) {
             isTabletLayout = true;
-        }
 
+        }
+//        if (isTabletLayout) {
+//
+//        }
         disaplyRecepiesPresenterImpl.setView(this);
 
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             disaplyRecepiesPresenterImpl.executeCall();
         }
         isTabletLayout = isTablet(this);
-        if (isTabletLayout) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+
 
 
         getIdlingResource();

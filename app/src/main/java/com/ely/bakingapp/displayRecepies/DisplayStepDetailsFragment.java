@@ -216,16 +216,21 @@ public class DisplayStepDetailsFragment extends Fragment implements Player.Event
 
         }
 
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ((RecepieActivity) getActivity()).getSupportActionBar().hide();
-            params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
-            params.width = params.MATCH_PARENT;
-            params.height = params.MATCH_PARENT;
-            exoPlayerView.setLayoutParams(params);
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                &&!RecepieActivity.isTablet(getActivity())) {
+            setPlayerFullScreen();
 
         }
     }
 
+
+    private void setPlayerFullScreen(){
+        ((RecepieActivity) getActivity()).getSupportActionBar().hide();
+        params = (LinearLayout.LayoutParams) exoPlayerView.getLayoutParams();
+        params.width = params.MATCH_PARENT;
+        params.height = params.MATCH_PARENT;
+        exoPlayerView.setLayoutParams(params);
+    }
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {

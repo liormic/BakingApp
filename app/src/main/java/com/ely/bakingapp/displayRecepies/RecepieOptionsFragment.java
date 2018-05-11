@@ -127,8 +127,6 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-
-
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(getActivity().getString(R.string.recepies), recepieObjects);
         bundle.putInt(getActivity().getString(R.string.step_position), stepPosition);
@@ -136,9 +134,18 @@ public class RecepieOptionsFragment extends android.app.Fragment implements Rece
         DisplayStepDetailsFragment displayStepDetailsFragment = new DisplayStepDetailsFragment();
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
         displayStepDetailsFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, displayStepDetailsFragment, getString(R.string.df));
-        fragmentTransaction.addToBackStack(getString(R.string.df));
-        fragmentTransaction.commitAllowingStateLoss();
+        if(isTabletayout) {
+
+            fragmentTransaction.replace(R.id.steps_detail_container, displayStepDetailsFragment, getString(R.string.df));
+            fragmentTransaction.addToBackStack(getString(R.string.df));
+            fragmentTransaction.commitAllowingStateLoss();
+
+        }else{
+
+            fragmentTransaction.replace(R.id.container, displayStepDetailsFragment, getString(R.string.df));
+            fragmentTransaction.addToBackStack(getString(R.string.df));
+            fragmentTransaction.commitAllowingStateLoss();
+        }
 
 
     }

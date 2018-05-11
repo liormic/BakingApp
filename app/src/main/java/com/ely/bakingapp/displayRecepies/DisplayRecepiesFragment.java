@@ -2,6 +2,7 @@ package com.ely.bakingapp.displayRecepies;
 
 
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,6 +40,9 @@ public class DisplayRecepiesFragment extends android.app.Fragment implements Vie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recepie_fragment, container, false);
         ButterKnife.bind(this, rootView);
+        if(RecepieActivity.isTablet(getActivity())){
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
         ((RecepieActivity)getActivity()).setHomeButton(false);
         initRecyclerView();
         return rootView;
